@@ -107,7 +107,7 @@ def send_email(subject, body, to_email, sender_email, sender_password):
 
 def format_email_body(courses, stid):
     """格式化邮件内容"""
-    email_body_lines = [f"以下{stid}是未完成的作业信息：\n"]
+    email_body_lines = [f"以下是{stid}未完成的作业信息：\n"]
 
     for course_info in courses.values():
         email_body_lines.append(f"科目: {course_info['course_name']}\n未完成作业:")
