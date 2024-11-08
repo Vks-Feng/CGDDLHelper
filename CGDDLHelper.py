@@ -72,9 +72,16 @@ def parse_assignments(soup):
         for link in active_assignments_div.find_all('a'):
             name = link.get_text(strip=True)
             url = BASE_URL + '/' + link['href']
-            due_time = link.find_next('span', class_='').get_text(strip=True) if link.find_next('span', class_='') else None
-            is_late_submission = '补交时间' in link.find_next('span', class_='badge').get_text(strip=True)
+            
+            # 获取截止时间
+            due_time_span = link.find_next('span', class_='')
+            due_time = due_time_span.get_text(strip=True) if due_time_span else None
+            
+            # 检查是否为补交状态
+            badge_span = link.find_next('span', class_='badge')
+            is_late_submission = '补交时间' in badge_span.get_text(strip=True) if badge_span else False
 
+            # 检查是否已完成
             is_completed = check_assignment_completion(url)
 
             # 添加作业信息
@@ -86,6 +93,7 @@ def parse_assignments(soup):
                 'is_late_submission': is_late_submission
             })
     return assignments
+
 
 def send_email(subject, body, to_email, sender_email, sender_password):
     """发送邮件功能"""
