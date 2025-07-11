@@ -106,3 +106,86 @@ pip install requests beautifulsoup4 Pillow
 在开发过程中，我尝试利用了tesseract ocr去识别验证码的内容，但是效果不好，如果能破解验证码，本工具将会更加自动化......
 
 
+
+好的，这是一个简洁明了的 `README.md` 文件，你可以直接复制使用。它包含了项目介绍、功能、如何安装和使用，以及注意事项。
+
+---
+
+# 希冀平台在线作业自动提醒脚本
+
+这是一个 Python 脚本，旨在帮助用户自动监控希冀教学平台，并在老师发布新作业时通过系统通知和声音提醒用户。
+
+## 主要功能
+
+- **自动登录**：集成了基于 Tesseract 的 OCR 技术，可自动识别验证码进行登录。
+- **智能提醒**：只在有**新**作业发布时进行提醒，避免重复打扰。
+- **无人值守**：
+  - OCR 识别失败时会自动重试，无需人工干预。
+  - 当连续3分钟无法成功登录时，会通过**声音**和**弹窗**警报，提示用户手动输入验证码。
+- **跨平台**：支持 Windows、macOS 和 Linux。
+- **持久化存储**：已发现的作业列表和用户配置（学号、密码等）会保存在本地文件中，重启后依然有效。
+
+## 环境要求
+
+- Python 3.6+
+- Tesseract OCR 引擎
+
+## 安装指南
+
+### 1. 克隆或下载项目
+
+将本项目所有文件下载到你的本地文件夹。
+
+### 2. 安装 Tesseract OCR
+
+- **Windows**: 从 [Tesseract at UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki) 下载并安装。**务必记住你的安装路径**，例如 `C:\Program Files\Tesseract-OCR\tesseract.exe`。
+- **macOS**: 使用 Homebrew: `brew install tesseract`
+- **Linux (Debian/Ubuntu)**: `sudo apt update && sudo apt install tesseract-ocr`
+
+### 3. 安装 Python 依赖库
+
+在项目根目录下打开终端，运行以下命令：
+
+```bash
+pip install -r requirements.txt
+```
+
+如果没有 `requirements.txt` 文件，可以手动安装所有依赖：
+
+```bash
+pip install requests beautifulsoup4 Pillow plyer playsound==1.2.2 pytesseract opencv-python numpy
+```
+
+### 4. 准备警报声音文件
+
+下载一个你喜欢的简短提示音（如 `.wav` 或 `.mp3` 格式），将其重命名为 `alert.wav`，并放在项目根目录下。（本项目默认提供了一个）
+
+## 使用方法
+
+1.  **运行通知测试脚本（可选但推荐）**
+    在终端中运行测试脚本，确保你的系统通知和声音播放功能正常。
+
+    ```bash
+    python test_notification.py
+    ```
+    你应该能看到一个弹窗并听到一声提示音。
+
+2.  **运行主脚本**
+    ```bash
+    python CGOnlineHWNotifier_Advanced_v3.py
+    ```
+
+3.  **首次配置**
+    - 脚本会提示你输入学号和密码。
+    - 如果你使用的是 Windows，脚本会自动检测并提示你输入 `tesseract.exe` 的完整路径。
+    - 输入的信息将被保存在 `config.json` 文件中，下次运行时会自动加载。
+
+4.  **让脚本在后台运行**
+    配置完成后，脚本将开始每隔30秒自动检查一次。你可以将终端最小化，让它在后台持续运行。当有新作业或需要你手动干预时，它会主动提醒你。
+
+## 注意事项
+
+- **请求频率**：默认每30秒检查一次。如果遇到因访问频繁导致的问题，可以适当增大脚本中的 `CHECK_INTERVAL_SECONDS` 值。
+- **OCR 识别率**：验证码识别成功率不保证100%。如果自动识别持续失败，脚本会触发手动输入模式。
+- **网站更新**：如果希冀平台前端代码发生变化，可能会导致脚本解析失败。届时需要更新脚本中的 HTML 解析逻辑。
+- **保持运行**：脚本需要保持运行状态才能进行监控。可以考虑使用 `nohup` (Linux/macOS) 或其他工具让它在后台稳定运行。

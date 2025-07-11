@@ -1,0 +1,8 @@
+requests
+beautifulsoup4
+Pillow
+plyer
+playsound==1.2.2
+pytesseract
+opencv-python
+numpy
